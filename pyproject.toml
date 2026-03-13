@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "apimemo"
+version = "0.1.0"
+description = "Automatic HTTP request logging for Python. Records every outgoing API call (httpx, requests) to your database with batch buffering, Django Admin & FastAPI admin panel support. Zero-config, production-ready."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+keywords = ["api", "logging", "http", "tracing", "requests", "monitoring", "django", "fastapi"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Monitoring",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Framework :: Django",
+    "Framework :: FastAPI",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/baxtikdev/apimemo"
+Repository = "https://github.com/baxtikdev/apimemo"
+Issues = "https://github.com/baxtikdev/apimemo/issues"
+Changelog = "https://github.com/baxtikdev/apimemo/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+httpx = ["httpx>=0.24"]
+requests = ["requests>=2.28"]
+sqlalchemy = ["sqlalchemy[asyncio]>=2.0", "httpx>=0.24"]
+tortoise = ["tortoise-orm>=0.19", "httpx>=0.24"]
+django = ["django>=3.2", "httpx>=0.24"]
+fastapi-admin = ["starlette-admin>=0.9"]
+all = ["apimemo[httpx,requests,sqlalchemy,tortoise,django,fastapi-admin]"]
+dev = [
+    "apimemo[all]",
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "ruff>=0.4",
+    "aiosqlite>=0.19",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
