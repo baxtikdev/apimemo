@@ -18,14 +18,6 @@ logger = logging.getLogger("apimemo")
 
 
 class ApiLogMixin:
-    """Mixin for SQLAlchemy model. Add to your own Base:
-
-        from apimemo.integrations.sqlalchemy import ApiLogMixin
-
-        class ApiLog(Base, ApiLogMixin):
-            __tablename__ = "api_logs"
-    """
-
     id = Column(Uuid, primary_key=True, default=uuid.uuid4)
     method = Column(String(10), nullable=False, index=True)
     url = Column(Text, nullable=False)
@@ -42,22 +34,6 @@ class ApiLogMixin:
 
 
 class SqlAlchemyIntegration(BaseIntegration):
-    """FastAPI + SQLAlchemy integration.
-
-    Usage:
-        from sqlalchemy.ext.asyncio import create_async_engine
-        from apimemo.integrations.sqlalchemy import SqlAlchemyIntegration
-
-        engine = create_async_engine("postgresql+asyncpg://...")
-        integration = SqlAlchemyIntegration(engine)
-
-        # Get logged httpx client
-        client = integration.get_async_client()
-
-        # Mount admin (optional)
-        integration.mount_admin(app)
-    """
-
     def __init__(self, engine: Any, session_factory: Any = None):
         self._engine = engine
         self._session_factory = session_factory
@@ -107,12 +83,6 @@ class SqlAlchemyIntegration(BaseIntegration):
             logger.exception("apimemo: failed to flush %d entries", len(entries))
 
     def mount_admin(self, app: Any, model: Any = None) -> None:
-        """Mount starlette-admin view for API logs.
-
-        Args:
-            app: FastAPI/Starlette application.
-            model: Your ApiLog model class (optional — auto-discovered if omitted).
-        """
         try:
             from apimemo.integrations._fastapi_admin import mount_admin
 

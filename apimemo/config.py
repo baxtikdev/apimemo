@@ -13,15 +13,15 @@ _SENTINEL = object()
 @dataclass(frozen=True)
 class ApiMemoConfig:
     enabled: bool = True
-    max_body_size: int = 10240  # 10KB — truncate request/response body
-    ttl_days: int = 30  # auto-delete logs older than N days, 0 = never
-    batch_size: int = 50  # flush after N logs
-    flush_interval: float = 5.0  # flush every N seconds
-    ignore_hosts: tuple[str, ...] = ()  # fnmatch patterns: ("localhost", "*.internal.io")
-    ignore_paths: tuple[str, ...] = ()  # fnmatch patterns: ("/health", "/metrics")
+    max_body_size: int = 10240
+    ttl_days: int = 30
+    batch_size: int = 50
+    flush_interval: float = 5.0
+    ignore_hosts: tuple[str, ...] = ()
+    ignore_paths: tuple[str, ...] = ()
     log_request_body: bool = True
     log_response_body: bool = True
-    log_headers: bool = False  # headers may contain secrets
+    log_headers: bool = False
 
     def should_ignore(self, host: str, path: str) -> bool:
         for pattern in self.ignore_hosts:
@@ -45,27 +45,29 @@ def configure(
     log_response_body: object = _SENTINEL,
     log_headers: object = _SENTINEL,
 ) -> ApiMemoConfig:
-    """Update configuration. Only provided fields are changed; others are preserved.
-
-    Call with no arguments to reset to defaults.
-    """
     global _config
 
     with _lock:
         current = _config or ApiMemoConfig()
 
-    # No arguments → reset to defaults
     all_sentinel = all(
         v is _SENTINEL
         for v in (
-            enabled, max_body_size, ttl_days, batch_size, flush_interval,
-            ignore_hosts, ignore_paths, log_request_body, log_response_body, log_headers,
+            enabled,
+            max_body_size,
+            ttl_days,
+            batch_size,
+            flush_interval,
+            ignore_hosts,
+            ignore_paths,
+            log_request_body,
+            log_response_body,
+            log_headers,
         )
     )
     if all_sentinel:
         config = ApiMemoConfig()
     else:
-        # Merge: start from current config, override only provided fields
         values = asdict(current)
         if enabled is not _SENTINEL:
             values["enabled"] = enabled

@@ -16,29 +16,7 @@ logger = logging.getLogger("apimemo")
 
 
 class DjangoIntegration(BaseIntegration):
-    """Django integration for apimemo.
-
-    Usage:
-        # settings.py
-        INSTALLED_APPS = ["apimemo", ...]
-
-        # Run migrations:
-        python manage.py migrate
-
-        # In your code:
-        from apimemo.integrations.django import DjangoIntegration
-
-        integration = DjangoIntegration()
-        client = integration.get_client()  # sync httpx client
-        resp = client.get("https://api.example.com/data")
-
-        # Admin panel will show logs at /admin/apimemo/apilog/
-    """
-
     def _flush(self, entries: list[RequestLog]) -> None:
-        # LogBuffer calls _flush from a background Timer thread.
-        # Django DB connections are thread-local — we must ensure the
-        # connection is properly cleaned up to avoid leaks.
         try:
             close_old_connections()
             with connection.cursor() as cursor:

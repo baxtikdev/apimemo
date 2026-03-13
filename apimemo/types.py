@@ -6,8 +6,6 @@ from datetime import datetime, timezone
 
 @dataclass
 class RequestLog:
-    """Framework-agnostic request log entry. All integrations convert to/from this."""
-
     method: str
     url: str
     host: str

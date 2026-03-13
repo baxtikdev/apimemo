@@ -1,5 +1,3 @@
-"""Django admin registration — auto-discovered when apimemo is in INSTALLED_APPS."""
-
 from __future__ import annotations
 
 try:

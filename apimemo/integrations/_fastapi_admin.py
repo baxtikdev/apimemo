@@ -30,14 +30,6 @@ class ApiLogView(ModelView):
 
 
 def mount_admin(app: Any, engine: Any, model: Any = None) -> None:
-    """Mount starlette-admin with ApiLog view.
-
-    Args:
-        app: FastAPI/Starlette application.
-        engine: SQLAlchemy engine (sync or async).
-        model: The user's SQLAlchemy model that inherits ApiLogMixin.
-               If None, auto-discovers from SQLAlchemy mapper registry.
-    """
     if model is None:
         model = _discover_model()
 
@@ -45,8 +37,7 @@ def mount_admin(app: Any, engine: Any, model: Any = None) -> None:
         import logging
 
         logging.getLogger("apimemo").warning(
-            "apimemo: ApiLogMixin model not found. "
-            "Pass model= explicitly or create a model inheriting ApiLogMixin."
+            "apimemo: ApiLogMixin model not found. Pass model= explicitly or create a model inheriting ApiLogMixin."
         )
         return
 
@@ -57,7 +48,6 @@ def mount_admin(app: Any, engine: Any, model: Any = None) -> None:
 
 
 def _discover_model() -> Any | None:
-    """Try to find the user's model that inherits ApiLogMixin via SQLAlchemy's mapper registry."""
     from apimemo.integrations.sqlalchemy import ApiLogMixin
 
     try:
@@ -65,7 +55,6 @@ def _discover_model() -> Any | None:
     except ImportError:
         return None
 
-    # Walk all subclasses of DeclarativeBase to find one that uses ApiLogMixin
     for subclass in _all_subclasses(DeclarativeBase):
         if ApiLogMixin in subclass.__mro__ and not getattr(subclass, "__abstract__", False):
             return subclass
@@ -74,7 +63,6 @@ def _discover_model() -> Any | None:
 
 
 def _all_subclasses(cls: type) -> set[type]:
-    """Recursively collect all subclasses."""
     result = set()
     work = list(cls.__subclasses__())
     while work:

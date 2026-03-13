@@ -1,8 +1,6 @@
 try:
     from django.apps import AppConfig
 except ImportError:
-    # Not a Django project — apps.py is only loaded by Django's app registry.
-    # Provide a placeholder so the module can be imported without error.
     AppConfig = None  # type: ignore[assignment,misc]
 
 

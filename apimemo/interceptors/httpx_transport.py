@@ -71,13 +71,6 @@ def _build_log(
 
 
 class ApimemoTransport(httpx.BaseTransport):
-    """Sync httpx transport wrapper that logs requests.
-
-    Usage:
-        transport = ApimemoTransport(buffer, base_transport=httpx.HTTPTransport())
-        client = httpx.Client(transport=transport)
-    """
-
     def __init__(self, buffer: LogBuffer, base_transport: httpx.BaseTransport | None = None):
         self._buffer = buffer
         self._transport = base_transport or httpx.HTTPTransport()
@@ -102,13 +95,6 @@ class ApimemoTransport(httpx.BaseTransport):
 
 
 class AsyncApimemoTransport(httpx.AsyncBaseTransport):
-    """Async httpx transport wrapper that logs requests.
-
-    Usage:
-        transport = AsyncApimemoTransport(buffer, base_transport=httpx.AsyncHTTPTransport())
-        client = httpx.AsyncClient(transport=transport)
-    """
-
     def __init__(self, buffer: LogBuffer, base_transport: httpx.AsyncBaseTransport | None = None):
         self._buffer = buffer
         self._transport = base_transport or httpx.AsyncHTTPTransport()

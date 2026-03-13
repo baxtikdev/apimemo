@@ -12,14 +12,6 @@ logger = logging.getLogger("apimemo")
 
 
 class LogBuffer:
-    """Thread-safe buffer that collects RequestLog entries and flushes them in batches.
-
-    flush_fn is called with a list of RequestLog entries when:
-    - buffer reaches batch_size
-    - flush_interval seconds have passed
-    - atexit (process shutdown)
-    """
-
     def __init__(self, flush_fn: Callable[[list[RequestLog]], None]):
         self._flush_fn = flush_fn
         self._buffer: list[RequestLog] = []

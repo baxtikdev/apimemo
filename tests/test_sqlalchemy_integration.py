@@ -6,9 +6,19 @@ from apimemo.integrations.sqlalchemy import ApiLogMixin, SqlAlchemyIntegration
 class TestApiLogMixin:
     def test_has_required_columns(self) -> None:
         required = [
-            "id", "method", "url", "host", "path", "status_code",
-            "request_headers", "request_body", "response_headers", "response_body",
-            "duration_ms", "error", "created_at",
+            "id",
+            "method",
+            "url",
+            "host",
+            "path",
+            "status_code",
+            "request_headers",
+            "request_body",
+            "response_headers",
+            "response_body",
+            "duration_ms",
+            "error",
+            "created_at",
         ]
         for col_name in required:
             assert hasattr(ApiLogMixin, col_name), f"Missing column: {col_name}"

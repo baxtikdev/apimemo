@@ -16,24 +16,6 @@ logger = logging.getLogger("apimemo")
 
 
 class ApiLog(models.Model):
-    """Tortoise ORM model for API logs.
-
-    Usage:
-        # In your Tortoise config, add this model:
-        TORTOISE_ORM = {
-            "apps": {
-                "apimemo": {
-                    "models": ["apimemo.integrations.tortoise"],
-                    "default_connection": "default",
-                }
-            }
-        }
-
-        # Then use aerich to generate migrations:
-        aerich migrate
-        aerich upgrade
-    """
-
     id = fields.UUIDField(primary_key=True, default=uuid.uuid4)
     method = fields.CharField(max_length=10, db_index=True)
     url = fields.TextField()
@@ -57,21 +39,6 @@ class ApiLog(models.Model):
 
 
 class TortoiseIntegration(BaseIntegration):
-    """Tortoise ORM integration for apimemo.
-
-    Usage:
-        from apimemo.integrations.tortoise import TortoiseIntegration
-
-        integration = TortoiseIntegration()
-        client = integration.get_async_client()
-
-        # Make requests — they will be logged to api_logs table
-        resp = await client.get("https://api.example.com/data")
-
-        # When shutting down
-        integration.stop()
-    """
-
     def _flush(self, entries: list[RequestLog]) -> None:
         dispatch_async_flush(self._async_flush, entries)
 

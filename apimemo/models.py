@@ -1,5 +1,3 @@
-"""Django models — only loaded when Django is installed and apimemo is in INSTALLED_APPS."""
-
 from __future__ import annotations
 
 import uuid
@@ -7,18 +5,10 @@ import uuid
 try:
     from django.db import models
 except ImportError:
-    # Not a Django project — skip model definition entirely.
-    # Other integrations (SQLAlchemy, Tortoise) use their own model files.
     pass
 else:
 
     class ApiLog(models.Model):
-        """Stores outgoing HTTP request logs.
-
-        Added automatically when you include "apimemo" in INSTALLED_APPS.
-        Run `python manage.py migrate` to create the table.
-        """
-
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         method = models.CharField(max_length=10, db_index=True)
         url = models.TextField()

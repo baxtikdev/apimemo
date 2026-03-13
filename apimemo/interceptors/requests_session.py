@@ -17,13 +17,6 @@ if TYPE_CHECKING:
 
 
 class ApimemoSession(requests.Session):
-    """Drop-in replacement for requests.Session that logs all requests.
-
-    Usage:
-        session = ApimemoSession(buffer)
-        session.get("https://api.example.com/users")
-    """
-
     def __init__(self, buffer: LogBuffer, **kwargs: Any):
         super().__init__(**kwargs)
         self._buffer = buffer
@@ -63,7 +56,7 @@ class ApimemoSession(requests.Session):
             if config.log_request_body:
                 body = kwargs.get("data") or kwargs.get("json")
                 if body is not None:
-                    log.request_body = str(body)[:config.max_body_size] if body else None
+                    log.request_body = str(body)[: config.max_body_size] if body else None
 
             if config.log_headers and response:
                 log.request_headers = dict(response.request.headers)
