@@ -17,6 +17,12 @@ class RequestLog:
     response_body: str | None = None
     duration_ms: float = 0.0
     error: str | None = None
+    provider: str | None = None
+    ai_model: str | None = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    total_tokens: int | None = None
+    cost_usd: float | None = None
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def truncate(self, max_size: int) -> None:

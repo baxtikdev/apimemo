@@ -9,6 +9,7 @@ try:
 except ImportError:
     raise ImportError("Install apimemo[requests]: pip install apimemo[requests]") from None
 
+from apimemo.ai import enrich_ai_fields
 from apimemo.config import get_config
 from apimemo.types import RequestLog
 
@@ -71,5 +72,6 @@ class ApimemoSession(requests.Session):
                 except Exception:
                     pass
 
+            enrich_ai_fields(log)
             log.truncate(config.max_body_size)
             self._buffer.add(log)

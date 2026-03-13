@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "apimemo"
-version = "0.1.0"
-description = "Automatic HTTP request logging for Python. Records every outgoing API call (httpx, requests) to your database with batch buffering, Django Admin & FastAPI admin panel support. Zero-config, production-ready."
+version = "0.2.0"
+description = "Automatic HTTP request logging with AI token tracking. Records outgoing API calls (httpx, requests), extracts token usage & cost from OpenAI/Anthropic/Google/Groq/Mistral/DeepSeek responses. Django Admin & FastAPI admin support."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"

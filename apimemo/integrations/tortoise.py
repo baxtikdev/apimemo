@@ -28,6 +28,12 @@ class ApiLog(models.Model):
     response_body = fields.TextField(null=True)
     duration_ms = fields.FloatField(default=0.0)
     error = fields.TextField(null=True)
+    provider = fields.CharField(max_length=50, null=True, db_index=True)
+    ai_model = fields.CharField(max_length=255, null=True, db_index=True)
+    input_tokens = fields.IntField(null=True)
+    output_tokens = fields.IntField(null=True)
+    total_tokens = fields.IntField(null=True)
+    cost_usd = fields.FloatField(null=True)
     created_at = fields.DatetimeField(auto_now_add=True, db_index=True)
 
     class Meta:
@@ -57,6 +63,12 @@ class TortoiseIntegration(BaseIntegration):
                     response_body=entry.response_body,
                     duration_ms=entry.duration_ms,
                     error=entry.error,
+                    provider=entry.provider,
+                    ai_model=entry.ai_model,
+                    input_tokens=entry.input_tokens,
+                    output_tokens=entry.output_tokens,
+                    total_tokens=entry.total_tokens,
+                    cost_usd=entry.cost_usd,
                     created_at=entry.created_at,
                 )
                 for entry in entries

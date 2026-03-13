@@ -24,8 +24,9 @@ class DjangoIntegration(BaseIntegration):
                     cursor.execute(
                         "INSERT INTO api_logs "
                         "(id, method, url, host, path, status_code, request_headers, request_body, "
-                        "response_headers, response_body, duration_ms, error, created_at) "
-                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                        "response_headers, response_body, duration_ms, error, "
+                        "provider, ai_model, input_tokens, output_tokens, total_tokens, cost_usd, created_at) "
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                         [
                             str(uuid.uuid4()),
                             entry.method,
@@ -39,6 +40,12 @@ class DjangoIntegration(BaseIntegration):
                             entry.response_body,
                             entry.duration_ms,
                             entry.error,
+                            entry.provider,
+                            entry.ai_model,
+                            entry.input_tokens,
+                            entry.output_tokens,
+                            entry.total_tokens,
+                            entry.cost_usd,
                             entry.created_at,
                         ],
                     )

@@ -30,6 +30,12 @@ class ApiLogMixin:
     response_body = Column(Text, nullable=True)
     duration_ms = Column(Float, nullable=False, default=0.0)
     error = Column(Text, nullable=True)
+    provider = Column(String(50), nullable=True, index=True)
+    ai_model = Column(String(255), nullable=True, index=True)
+    input_tokens = Column(Integer, nullable=True)
+    output_tokens = Column(Integer, nullable=True)
+    total_tokens = Column(Integer, nullable=True)
+    cost_usd = Column(Float, nullable=True)
     created_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc), index=True)
 
 
@@ -58,9 +64,12 @@ class SqlAlchemyIntegration(BaseIntegration):
                         text(
                             "INSERT INTO api_logs "
                             "(id, method, url, host, path, status_code, request_headers, request_body, "
-                            "response_headers, response_body, duration_ms, error, created_at) "
+                            "response_headers, response_body, duration_ms, error, "
+                            "provider, ai_model, input_tokens, output_tokens, total_tokens, cost_usd, created_at) "
                             "VALUES (:id, :method, :url, :host, :path, :status_code, :req_h, :req_b, "
-                            ":res_h, :res_b, :duration_ms, :error, :created_at)"
+                            ":res_h, :res_b, :duration_ms, :error, "
+                            ":provider, :ai_model, :input_tokens, :output_tokens, "
+                            ":total_tokens, :cost_usd, :created_at)"
                         ),
                         {
                             "id": str(uuid.uuid4()),
@@ -75,6 +84,12 @@ class SqlAlchemyIntegration(BaseIntegration):
                             "res_b": entry.response_body,
                             "duration_ms": entry.duration_ms,
                             "error": entry.error,
+                            "provider": entry.provider,
+                            "ai_model": entry.ai_model,
+                            "input_tokens": entry.input_tokens,
+                            "output_tokens": entry.output_tokens,
+                            "total_tokens": entry.total_tokens,
+                            "cost_usd": entry.cost_usd,
                             "created_at": entry.created_at,
                         },
                     )

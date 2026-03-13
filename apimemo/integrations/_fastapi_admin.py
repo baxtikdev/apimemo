@@ -21,12 +21,29 @@ class ApiLogView(ModelView):
         TextAreaField("request_body", label="Request Body"),
         TextAreaField("response_body", label="Response Body"),
         TextAreaField("error", label="Error"),
+        StringField("provider", label="Provider"),
+        StringField("ai_model", label="AI Model"),
+        IntegerField("input_tokens", label="Input Tokens"),
+        IntegerField("output_tokens", label="Output Tokens"),
+        IntegerField("total_tokens", label="Total Tokens"),
+        FloatField("cost_usd", label="Cost (USD)"),
         DateTimeField("created_at", label="Created At"),
     ]
     fields_default_sort = [("created_at", True)]
     page_size = 50
-    search_fields = ["url", "host", "method", "error"]
-    list_display = ["method", "host", "path", "status_code", "duration_ms", "created_at"]
+    search_fields = ["url", "host", "method", "error", "provider", "ai_model"]
+    list_display = [
+        "method",
+        "host",
+        "path",
+        "status_code",
+        "duration_ms",
+        "provider",
+        "ai_model",
+        "total_tokens",
+        "cost_usd",
+        "created_at",
+    ]
 
 
 def mount_admin(app: Any, engine: Any, model: Any = None) -> None:

@@ -21,6 +21,12 @@ else:
         response_body = models.TextField(blank=True, null=True)
         duration_ms = models.FloatField(default=0.0)
         error = models.TextField(blank=True, null=True)
+        provider = models.CharField(max_length=50, blank=True, null=True, db_index=True)
+        ai_model = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+        input_tokens = models.IntegerField(blank=True, null=True)
+        output_tokens = models.IntegerField(blank=True, null=True)
+        total_tokens = models.IntegerField(blank=True, null=True)
+        cost_usd = models.FloatField(blank=True, null=True)
         created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
         class Meta:

@@ -9,6 +9,7 @@ try:
 except ImportError:
     raise ImportError("Install apimemo[httpx]: pip install apimemo[httpx]") from None
 
+from apimemo.ai import enrich_ai_fields
 from apimemo.config import get_config
 from apimemo.types import RequestLog
 
@@ -66,6 +67,8 @@ def _build_log(
             log.response_body = _extract_body(response.content, config.max_body_size)
         if config.log_headers:
             log.response_headers = _extract_headers(response.headers)
+
+    enrich_ai_fields(log)
 
     return log
 
