@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import logging
+from abc import ABC, abstractmethod
 from typing import Any
 
 from apimemo.buffer import LogBuffer
 from apimemo.types import RequestLog
+
+logger = logging.getLogger("apimemo")
 
 
 def dispatch_async_flush(coro_fn: Any, entries: list[RequestLog]) -> None:
@@ -19,18 +23,18 @@ def dispatch_async_flush(coro_fn: Any, entries: list[RequestLog]) -> None:
         try:
             future.result(timeout=10)
         except Exception:
-            pass
+            logger.exception("apimemo: async flush failed, %d entries lost", len(entries))
     else:
         asyncio.run(coro_fn(entries))
 
 
-class BaseIntegration:
+class BaseIntegration(ABC):
     def __init__(self) -> None:
         self._buffer = LogBuffer(self._flush)
         self._buffer.start()
 
-    def _flush(self, entries: list[RequestLog]) -> None:
-        raise NotImplementedError
+    @abstractmethod
+    def _flush(self, entries: list[RequestLog]) -> None: ...
 
     def get_transport(self) -> Any:
         import httpx

@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from apimemo import pricing
 from apimemo.pricing import calculate_cost
 
 
 class TestCalculateCost:
+    def setup_method(self) -> None:
+        pricing._cache.clear()
+
     def test_exact_match(self) -> None:
         cost = calculate_cost("gpt-4o", 1_000_000, 0)
         assert cost == 2.50

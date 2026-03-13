@@ -46,13 +46,30 @@ COST_PER_1M: dict[str, tuple[float, float]] = {
 }
 
 
-def calculate_cost(model: str, input_tokens: int, output_tokens: int) -> float | None:
+_cache: dict[str, tuple[float, float] | None] = {}
+
+
+def _resolve_pricing(model: str) -> tuple[float, float] | None:
+    if model in _cache:
+        return _cache[model]
+
     pricing = COST_PER_1M.get(model)
     if pricing is None:
-        for key, val in COST_PER_1M.items():
-            if key in model or model in key:
-                pricing = val
-                break
+        best_key = None
+        best_len = 0
+        for key in COST_PER_1M:
+            if key in model and len(key) > best_len:
+                best_key = key
+                best_len = len(key)
+        if best_key:
+            pricing = COST_PER_1M[best_key]
+
+    _cache[model] = pricing
+    return pricing
+
+
+def calculate_cost(model: str, input_tokens: int, output_tokens: int) -> float | None:
+    pricing = _resolve_pricing(model)
     if pricing is None:
         return None
     input_cost, output_cost = pricing

@@ -50,48 +50,47 @@ def configure(
     with _lock:
         current = _config or ApiMemoConfig()
 
-    all_sentinel = all(
-        v is _SENTINEL
-        for v in (
-            enabled,
-            max_body_size,
-            ttl_days,
-            batch_size,
-            flush_interval,
-            ignore_hosts,
-            ignore_paths,
-            log_request_body,
-            log_response_body,
-            log_headers,
+        all_sentinel = all(
+            v is _SENTINEL
+            for v in (
+                enabled,
+                max_body_size,
+                ttl_days,
+                batch_size,
+                flush_interval,
+                ignore_hosts,
+                ignore_paths,
+                log_request_body,
+                log_response_body,
+                log_headers,
+            )
         )
-    )
-    if all_sentinel:
-        config = ApiMemoConfig()
-    else:
-        values = asdict(current)
-        if enabled is not _SENTINEL:
-            values["enabled"] = enabled
-        if max_body_size is not _SENTINEL:
-            values["max_body_size"] = max_body_size
-        if ttl_days is not _SENTINEL:
-            values["ttl_days"] = ttl_days
-        if batch_size is not _SENTINEL:
-            values["batch_size"] = batch_size
-        if flush_interval is not _SENTINEL:
-            values["flush_interval"] = flush_interval
-        if ignore_hosts is not _SENTINEL:
-            values["ignore_hosts"] = tuple(ignore_hosts)  # type: ignore[arg-type]
-        if ignore_paths is not _SENTINEL:
-            values["ignore_paths"] = tuple(ignore_paths)  # type: ignore[arg-type]
-        if log_request_body is not _SENTINEL:
-            values["log_request_body"] = log_request_body
-        if log_response_body is not _SENTINEL:
-            values["log_response_body"] = log_response_body
-        if log_headers is not _SENTINEL:
-            values["log_headers"] = log_headers
-        config = ApiMemoConfig(**values)
+        if all_sentinel:
+            config = ApiMemoConfig()
+        else:
+            values = asdict(current)
+            if enabled is not _SENTINEL:
+                values["enabled"] = enabled
+            if max_body_size is not _SENTINEL:
+                values["max_body_size"] = max_body_size
+            if ttl_days is not _SENTINEL:
+                values["ttl_days"] = ttl_days
+            if batch_size is not _SENTINEL:
+                values["batch_size"] = batch_size
+            if flush_interval is not _SENTINEL:
+                values["flush_interval"] = flush_interval
+            if ignore_hosts is not _SENTINEL:
+                values["ignore_hosts"] = tuple(ignore_hosts)  # type: ignore[arg-type]
+            if ignore_paths is not _SENTINEL:
+                values["ignore_paths"] = tuple(ignore_paths)  # type: ignore[arg-type]
+            if log_request_body is not _SENTINEL:
+                values["log_request_body"] = log_request_body
+            if log_response_body is not _SENTINEL:
+                values["log_response_body"] = log_response_body
+            if log_headers is not _SENTINEL:
+                values["log_headers"] = log_headers
+            config = ApiMemoConfig(**values)
 
-    with _lock:
         _config = config
 
     return config

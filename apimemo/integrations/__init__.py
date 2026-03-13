@@ -1,1 +1,1 @@
-__all__ = ["sqlalchemy", "tortoise", "django", "_fastapi_admin"]
+__all__ = ["sqlalchemy", "tortoise", "django"]

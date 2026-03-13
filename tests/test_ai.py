@@ -58,7 +58,7 @@ class TestEnrichAiFields:
         body = json.dumps(
             {
                 "model": "gemini-2.0-flash",
-                "usage": {"promptTokenCount": 50, "candidatesTokenCount": 30},
+                "usageMetadata": {"promptTokenCount": 50, "candidatesTokenCount": 30},
             }
         )
         log = _make_log("generativelanguage.googleapis.com", body)

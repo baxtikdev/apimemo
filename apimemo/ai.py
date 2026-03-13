@@ -56,6 +56,15 @@ def _parse_json(text: str | None) -> dict[str, Any] | None:
 
 
 def _extract_usage(body: dict[str, Any], provider: str) -> dict[str, int] | None:
+    if provider == "google":
+        usage = body.get("usageMetadata")
+        if not usage or not isinstance(usage, dict):
+            return None
+        return {
+            "input": usage.get("promptTokenCount", 0),
+            "output": usage.get("candidatesTokenCount", 0),
+        }
+
     usage = body.get("usage")
     if not usage or not isinstance(usage, dict):
         return None
@@ -64,12 +73,6 @@ def _extract_usage(body: dict[str, Any], provider: str) -> dict[str, int] | None
         return {
             "input": usage.get("input_tokens", 0),
             "output": usage.get("output_tokens", 0),
-        }
-
-    if provider == "google":
-        return {
-            "input": usage.get("promptTokenCount", 0),
-            "output": usage.get("candidatesTokenCount", 0),
         }
 
     return {

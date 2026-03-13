@@ -20,9 +20,10 @@ class LogBuffer:
         self._started = False
 
     def start(self) -> None:
-        if self._started:
-            return
-        self._started = True
+        with self._lock:
+            if self._started:
+                return
+            self._started = True
         self._schedule_flush()
         atexit.register(self.flush)
 
@@ -62,11 +63,14 @@ class LogBuffer:
 
     def _tick(self) -> None:
         self.flush()
-        if self._started:
+        with self._lock:
+            still_running = self._started
+        if still_running:
             self._schedule_flush()
 
     def stop(self) -> None:
-        self._started = False
+        with self._lock:
+            self._started = False
         if self._timer:
             self._timer.cancel()
             self._timer = None
